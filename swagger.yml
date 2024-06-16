@@ -1,15 +1,16 @@
 openapi: 3.0.0
 info:
   title: Task Management API
-  description: API for managing tasks and subtasks
   version: 1.0.0
+  description: API documentation for Task Management system
 servers:
   - url: http://localhost:3000/user
-
+    description: Local server
 paths:
   /tasks:
     post:
       summary: Create a new task
+      tags: [Tasks]
       requestBody:
         required: true
         content:
@@ -39,49 +40,48 @@ paths:
                             type: string
                           completed:
                             type: boolean
-              required:
-                - username
-                - task
       responses:
-        '201':
+        201:
           description: Task created successfully
-        '500':
-          description: Internal server error
-
+        400:
+          description: Bad request
   /tasks/{username}:
     get:
       summary: Get all tasks for a user
+      tags: [Tasks]
       parameters:
         - in: path
           name: username
+          required: true
           schema:
             type: string
-          required: true
-          description: Username
+          description: The username of the user
       responses:
-        '200':
+        200:
           description: A list of tasks
-        '404':
-          description: User not found
-        '500':
-          description: Internal server error
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
   /tasks/{username}/{taskId}:
     put:
       summary: Update a task
+      tags: [Tasks]
       parameters:
         - in: path
           name: username
+          required: true
           schema:
             type: string
-          required: true
-          description: Username
+          description: The username of the user
         - in: path
           name: taskId
+          required: true
           schema:
             type: string
-          required: true
-          description: Task ID
+          description: The ID of the task
       requestBody:
         required: true
         content:
@@ -99,39 +99,35 @@ paths:
                     completed:
                       type: boolean
       responses:
-        '200':
+        200:
           description: Task updated successfully
-        '404':
-          description: User or task not found
-        '500':
-          description: Internal server error
-
+        400:
+          description: Bad request
     delete:
       summary: Soft delete a task
+      tags: [Tasks]
       parameters:
         - in: path
           name: username
+          required: true
           schema:
             type: string
-          required: true
-          description: Username
+          description: The username of the user
         - in: path
           name: taskId
+          required: true
           schema:
             type: string
-          required: true
-          description: Task ID
+          description: The ID of the task
       responses:
-        '200':
-          description: Task soft deleted successfully
-        '404':
-          description: User or task not found
-        '500':
-          description: Internal server error
-
+        200:
+          description: Task deleted successfully
+        400:
+          description: Bad request
   /subtasks:
     post:
       summary: Create or update multiple subtasks for a task
+      tags: [Subtasks]
       requestBody:
         required: true
         content:
@@ -157,52 +153,52 @@ paths:
                       completed:
                         type: boolean
       responses:
-        '201':
-          description: Subtasks created or updated successfully
-        '404':
-          description: User or task not found
-        '500':
-          description: Internal server error
-
+        201:
+          description: Subtasks created/updated successfully
+        400:
+          description: Bad request
   /subtasks/{username}/{taskId}:
     get:
       summary: Get all subtasks for a specific task
+      tags: [Subtasks]
       parameters:
         - in: path
           name: username
+          required: true
           schema:
             type: string
-          required: true
-          description: Username
+          description: The username of the user
         - in: path
           name: taskId
+          required: true
           schema:
             type: string
-          required: true
-          description: Task ID
+          description: The ID of the task
       responses:
-        '200':
+        200:
           description: A list of subtasks
-        '404':
-          description: User or task not found
-        '500':
-          description: Internal server error
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subtask'
     put:
       summary: Update multiple subtasks for a task
+      tags: [Subtasks]
       parameters:
         - in: path
           name: username
+          required: true
           schema:
             type: string
-          required: true
-          description: Username
+          description: The username of the user
         - in: path
           name: taskId
+          required: true
           schema:
             type: string
-          required: true
-          description: Task ID
+          description: The ID of the task
       requestBody:
         required: true
         content:
@@ -224,28 +220,26 @@ paths:
                       completed:
                         type: boolean
       responses:
-        '200':
+        200:
           description: Subtasks updated successfully
-        '404':
-          description: User or task not found
-        '500':
-          description: Internal server error
-
+        400:
+          description: Bad request
     delete:
       summary: Soft delete multiple subtasks for a task
+      tags: [Subtasks]
       parameters:
         - in: path
           name: username
+          required: true
           schema:
             type: string
-          required: true
-          description: Username
+          description: The username of the user
         - in: path
           name: taskId
+          required: true
           schema:
             type: string
-          required: true
-          description: Task ID
+          description: The ID of the task
       requestBody:
         required: true
         content:
@@ -258,9 +252,35 @@ paths:
                   items:
                     type: string
       responses:
-        '200':
-          description: Subtasks soft deleted successfully
-        '404':
-          description: User or task not found
-        '500':
-          description: Internal server error
+        200:
+          description: Subtasks deleted successfully
+        400:
+          description: Bad request
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        completed:
+          type: boolean
+        subtasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subtask'
+    Subtask:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        completed:
+          type: boolean
