@@ -31,9 +31,9 @@ Records marked for deletion remain intact within the database and are excluded f
 ### Project Structure
 
 - **`app.js`**: The main entry point of the application. Sets up the Express server, connects to MongoDB, and includes the Swagger documentation.
-- **`controllers.js`**: Contains the logic for handling CRUD operations for tasks and subtasks.
-- **`models.js`**: Defines the MongoDB schemas and models for users, tasks, and subtasks.
-- **`routes.js`**: Defines the routes for the API endpoints.
+- **`controllers/taskController.js`**: Contains the logic for handling CRUD operations for tasks and subtasks.
+- **`models/User.js`**: Defines the MongoDB schemas and models for users, tasks, and subtasks.
+- **`routes/tasks.js`**: Defines the routes for the API endpoints.
 - **`swagger.yml`**: Contains the Swagger (OpenAPI) specification for the API documentation.
 
 ### Running the Application
