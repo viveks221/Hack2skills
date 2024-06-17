@@ -1,27 +1,26 @@
 const express = require("express");
-const {
-  createTask,
-  getTasks,
-  updateTask,
-  deleteTask,
-  createOrUpdateSubtasks,
-  updateSubtasks,
-  deleteSubtasks,
-  getSubtasks,
-} = require("../controller/taskController");
-
 const router = express.Router();
+const taskController = require("../controller/taskController");
 
-// Task CRUD routes
-router.post("/tasks", createTask);
-router.get("/tasks/:username", getTasks);
-router.put("/tasks/:username/:taskId", updateTask);
-router.delete("/tasks/:username/:taskId", deleteTask);
+// Middleware to parse JSON bodies
+router.use(express.json());
 
-// Subtask CRUD routes
-router.post("/subtasks", createOrUpdateSubtasks);
-router.put("/subtasks/:username/:taskId", updateSubtasks);
-router.delete("/subtasks/:username/:taskId", deleteSubtasks);
-router.get("/subtasks/:username/:taskId", getSubtasks);
+// Get all tasks for a user
+router.get("/tasks/:username", taskController.getAllTasks);
+
+// Create a new task
+router.post("/tasks", taskController.createTask);
+
+// Update a task
+router.put("/tasks/:taskId", taskController.updateTask);
+
+// Soft delete a task
+router.delete("/tasks/:taskId", taskController.deleteTask);
+
+// Get all subtasks for a task
+router.get("/tasks/:taskId/subtasks", taskController.getSubtasks);
+
+// Update multiple subtasks for a task
+router.put("/tasks/:taskId/subtasks", taskController.updateSubtasks);
 
 module.exports = router;

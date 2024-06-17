@@ -1,24 +1,24 @@
 const mongoose = require("mongoose");
 
 const subtaskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  completed: { type: Boolean, default: false },
+  subject: { type: String, required: true },
+  deadline: { type: Date, required: true },
+  status: { type: String, required: true },
   deleted: { type: Boolean, default: false },
 });
 
 const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: String,
-  completed: { type: Boolean, default: false },
+  subject: { type: String, required: true },
+  deadline: { type: Date, required: true },
+  status: { type: String, required: true },
   deleted: { type: Boolean, default: false },
   subtasks: [subtaskSchema],
 });
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  email: { type: String, required: true },
   tasks: [taskSchema],
 });
 
-const User = mongoose.model("User", userSchema);
-
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);
